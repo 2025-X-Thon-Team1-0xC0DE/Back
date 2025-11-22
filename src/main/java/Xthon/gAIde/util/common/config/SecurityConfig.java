@@ -43,7 +43,7 @@ public class SecurityConfig {
 //                                "/mcp",
 //                                "/api/signin",  // 로그인 API
 //                                "/api/signout" // 로그아웃 API
-                                "*"
+                                "/api/signup"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
