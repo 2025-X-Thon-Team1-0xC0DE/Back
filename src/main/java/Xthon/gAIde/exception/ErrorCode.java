@@ -64,6 +64,7 @@ public enum ErrorCode {
     CONFLICT_TEAM_COUNT("40901", HttpStatus.CONFLICT, "팀 정원을 초과하였습니다."),
     CONFLICT_TEAM_BUILDING("40902", HttpStatus.CONFLICT, "이미 팀에 가입되어 있어 다른 팀을 생성하거나 가입할 수 없습니다.."),
     CONFLICT_ADMIN_ID("40903", HttpStatus.CONFLICT, "로그인 실패"),
+    CONFLICT_MEMBER_ID("40904", HttpStatus.CONFLICT, "중복된 아이디입니다."),
 
 
 
