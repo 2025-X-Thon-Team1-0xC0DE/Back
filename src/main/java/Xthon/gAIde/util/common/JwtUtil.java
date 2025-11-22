@@ -31,9 +31,9 @@ public class JwtUtil {
     }
 
     // 학번을 받아서 JWT 생성
-    public String createJwt(Long id) {
+    public String createJwt(String loginId) {
         Claims claims = Jwts.claims();              // 토큰안에 담을 정보
-        claims.put("userId", id);                   // 유저 아이디
+        claims.put("loginId", loginId);                   // 유저 아이디
         long now = System.currentTimeMillis();      // 발급 시간
 
         // 토큰 조립
@@ -69,8 +69,8 @@ public class JwtUtil {
     }
 
     // 토큰 검증
-    public Long getUserId(String token) {
+    public String getloginId(String token) {
 
-        return parseClaims(token).get("userId", Long.class);
+        return parseClaims(token).get("LoginId", String.class);
     }
 }
