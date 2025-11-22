@@ -14,6 +14,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .addMapping("/api/**")
                 .allowedOrigins(
                         "http://localhost:3000",
+                        "http://localhost:5173",
                         "https://front-mauve-ten.vercel.app"
                 )
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
