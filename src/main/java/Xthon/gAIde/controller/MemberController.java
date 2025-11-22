@@ -26,8 +26,15 @@ public class MemberController {
         return CommonResponseDto.created("유저 회원가입 성공");
     }
 
+    // 유저 로그인
     @PostMapping("/signin")
     public CommonResponseDto<?> signin(@RequestBody SigninRequestDto signinRequestDto) {
         return CommonResponseDto.ok(signinService.signin(signinRequestDto));
+    }
+
+    // 유저 로그아웃
+    @PostMapping("/signout")
+    public CommonResponseDto<?> signout() {
+        return CommonResponseDto.ok("유저 로그아웃 성공");
     }
 }

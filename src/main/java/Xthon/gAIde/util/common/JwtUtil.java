@@ -67,7 +67,7 @@ public class JwtUtil {
 
     // 토큰에서 loginId 추출
     public String getloginId(String token) {
-        // ★ 수정됨: "LoginId" -> "loginId" (대소문자 일치)
+
         return parseClaims(token).get("loginId", String.class);
     }
 }
