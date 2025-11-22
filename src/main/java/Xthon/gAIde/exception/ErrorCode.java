@@ -45,7 +45,9 @@ public enum ErrorCode {
      */
     NOT_FOUND_END_POINT("40400", HttpStatus.NOT_FOUND, "존재하지 않는 엔드포인트입니다."),
     USER_NOT_FOUND("40401", HttpStatus.NOT_FOUND, "존재하지 않는 학번입니다."),
-    DOCUMENT_NOT_FOUND("40402", HttpStatus.NOT_FOUND, "존재하지 않는 문서입니다."),
+  DOCUMENT_NOT_FOUND("40402", HttpStatus.NOT_FOUND, "존재하지 않는 문서입니다."),
+  MEMBER_NOT_FOUND("40403", HttpStatus.NOT_FOUND, "존재하지 않는 계정입니다."),
+
 
 
 
