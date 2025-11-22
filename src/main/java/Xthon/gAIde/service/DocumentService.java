@@ -1,7 +1,10 @@
 package Xthon.gAIde.service;
 
 import Xthon.gAIde.domain.dto.request.AI.EvaluationRequest;
+import Xthon.gAIde.domain.dto.request.DocumentFeedbackRequestDto;
 import Xthon.gAIde.domain.dto.response.AI.EvaluationResponse;
+import Xthon.gAIde.domain.dto.response.AI.FeedbackResponseDto;
+import Xthon.gAIde.domain.dto.response.DocumentFeedbackResponseDto;
 import Xthon.gAIde.domain.dto.response.DocumentResponse;
 import Xthon.gAIde.domain.dto.response.DocumentSaveResponse;
 import Xthon.gAIde.domain.dto.request.DocumentCreateRequest;
@@ -17,6 +20,11 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestClient;
+import Xthon.gAIde.domain.dto.response.DocumentListResponse; // ⬅️ import 추가
+import java.util.List; // ⬅️ import 추가
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -72,6 +80,7 @@ public class DocumentService {
             EvaluationRequest aiRequest = new EvaluationRequest(
                     req.category().name(),// Enum이라면 name() 변환 필요
                     req.keywords(),
+                    req.description(),
                     req.userText()
             );
 
@@ -100,5 +109,64 @@ public class DocumentService {
                 eval, // eval: 나중에 AI 분석 결과로 대체될 부분
                 "글 저장 성공"         // msg
         );
+
+    }
+    public List<DocumentListResponse> getMyDocuments(Long memberId) {
+        // 1. DB에서 내 글 다 가져오기 (최신순)
+        List<Document> documents = documentRepository.findAllByMemberIdOrderByIdDesc(memberId);
+
+        // 2. DTO로 변환해서 반환
+        return documents.stream()
+                .map(DocumentListResponse::from)
+                .toList();
+    }
+
+    // AI에 피드백 요청
+    @Transactional
+    public DocumentFeedbackResponseDto feedbackDocument(
+            Long docId, DocumentFeedbackRequestDto feedbackDto
+    ) {
+        DocumentUpdateRequest updateRequestDto = new DocumentUpdateRequest(
+                docId,
+                feedbackDto.category(),
+                feedbackDto.keywords(),
+                feedbackDto.description(),
+                feedbackDto.userText()
+        );
+
+        // 피드백 요청 전 먼저 저장
+        updateDocument(docId, updateRequestDto);
+
+        List<String> feedback = List.of("ai 서버 연결 실패");
+
+        try {
+
+            // AI에게 피드백 요청
+            FeedbackResponseDto feedbackResponseDto = restClient.post()
+                    .uri("https://port-0-gaide-mhvvbjymeac0f465.sel3.cloudtype.app/api/feedback")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(feedbackDto)
+                    .retrieve()
+                    .body(FeedbackResponseDto.class);
+
+            System.out.println(feedbackResponseDto);
+
+            System.out.println(feedbackResponseDto.feedback());
+
+            if (feedbackResponseDto != null && feedbackResponseDto.feedback() != null) {
+                feedback = feedbackResponseDto.feedback();
+                System.out.println("if문 test");
+            }
+        } catch (Exception e) {
+            log.error("AI 서버 호출 중 오류 발생: {}", e.getMessage());
+            feedback = List.of("AI 분석을 완료할 수 없습니다: " + e.getMessage());
+        }
+
+        return new DocumentFeedbackResponseDto(
+                feedback,
+                "글 저장 성공"
+        );
+
+
     }
 }
