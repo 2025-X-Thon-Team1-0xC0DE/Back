@@ -71,6 +71,6 @@ public class JwtUtil {
     // 토큰 검증
     public String getloginId(String token) {
 
-        return parseClaims(token).get("LoginId", String.class);
+        return parseClaims(token).get("loginId", String.class);
     }
 }
