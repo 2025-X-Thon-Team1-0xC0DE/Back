@@ -30,7 +30,7 @@ public class JwtUtil {
         return Keys.hmacShaKeyFor(keyBytes);                            // HMAC-SHA에 맞는 Key 생성
     }
 
-    // 학번을 받아서 JWT 생성
+    // loginId로 토큰 생성
     public String createJwt(String loginId) {
         Claims claims = Jwts.claims();              // 토큰안에 담을 정보
         claims.put("loginId", loginId);                   // 유저 아이디
