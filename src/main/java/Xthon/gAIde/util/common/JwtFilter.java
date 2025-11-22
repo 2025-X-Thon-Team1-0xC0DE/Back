@@ -34,8 +34,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
         // 검사 예외 경로
         String path = request.getRequestURI();
-        if (path.equals("/api/signin") || path.equals("/api/signout") || path.equals("/api/signup") ||
-                path.equals("/mcp")) {
+        if (path.equals("/api/signin") || path.equals("/api/signup")) {
 
             filterChain.doFilter(request, response);
             return;
@@ -55,10 +54,10 @@ public class JwtFilter extends OncePerRequestFilter {
 
         // 성공 시 인증 정보 등록 후 다음 필터로 넘어감, 실패 시 커스텀익셉션
         try {
-            Long userId = jwtUtil.getUserId(token);
+            String loginId = jwtUtil.getloginId(token);
 
             UsernamePasswordAuthenticationToken authenticationToken =
-                    new UsernamePasswordAuthenticationToken(userId, null, null);
+                    new UsernamePasswordAuthenticationToken(loginId, null, null);
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
             filterChain.doFilter(request, response);
