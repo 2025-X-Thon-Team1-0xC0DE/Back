@@ -41,9 +41,12 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(
 //                                "/mcp",
+                                    "/api/**",
 //                                "/api/signin",  // 로그인 API
-//                                "/api/signout" // 로그아웃 API
+//                                "/api/signout", // 로그아웃 API
+
                                 "*"
+
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
