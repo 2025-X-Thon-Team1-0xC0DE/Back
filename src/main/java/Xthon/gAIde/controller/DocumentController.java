@@ -1,6 +1,7 @@
 package Xthon.gAIde.controller;
 
-import Xthon.gAIde.domain.dto.response.DocumentFeedbackResponse;
+import Xthon.gAIde.domain.dto.request.DocumentFeedbackRequestDto;
+import Xthon.gAIde.domain.dto.response.DocumentFeedbackResponseDto;
 import Xthon.gAIde.domain.dto.response.DocumentResponse;
 import Xthon.gAIde.domain.dto.response.DocumentSaveResponse;
 import Xthon.gAIde.domain.dto.request.DocumentCreateRequest;
@@ -25,15 +26,6 @@ public class DocumentController {
 
     private final DocumentService documentService;
 
-    // [GET] 마이 페이지
-    // URL: /api/documents
-    @GetMapping
-    public CommonResponseDto<List<DocumentListResponse>> getMyDocuments(
-            @AuthenticationPrincipal CustomUserDetails user
-    ) {
-        return CommonResponseDto.ok(documentService.getMyDocuments(user.getUserId()));
-    }
-
     /**
      * [POST] 글 생성
      * URL: /api/documents
@@ -46,6 +38,7 @@ public class DocumentController {
     ) {
         return CommonResponseDto.ok(documentService.createDocument(user.getUserId(), requestDto));
     }
+
     /**
      * [GET] 글 조회 (작성 화면 진입)
      * URL: /api/documents/{docId}
@@ -74,10 +67,15 @@ public class DocumentController {
         return CommonResponseDto.ok(response);
     }
 
-    @PostMapping("{docId}/feedback")
-    public CommonResponseDto<DocumentFeedbackResponse> outlineDocument(){
-
-        DocumentFeedbackResponse response = null;
-        return CommonResponseDto.ok(response);
+    // 사용자가 작성한 글을 피드백해 줌
+    // 피드백 전에 작성 내용은 DB에 저장됨
+    @PatchMapping("/{docId}/feedback")
+    public CommonResponseDto<?> feedbackDocument(
+            @PathVariable Long docId,
+            @RequestBody DocumentFeedbackRequestDto feedbackDto
+    ){
+        return CommonResponseDto.ok(documentService.feedbackDocument(docId, feedbackDto));
     }
+
+
 }
