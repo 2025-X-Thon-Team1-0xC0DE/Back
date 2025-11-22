@@ -143,7 +143,7 @@ public class DocumentService {
 
             // AI에게 피드백 요청
             FeedbackResponseDto feedbackResponseDto = restClient.post()
-                    .uri("https://port-0-gaide-mhvvbjymeac0f465.sel3.cloudtype.app/api/evaluation")
+                    .uri("https://port-0-gaide-mhvvbjymeac0f465.sel3.cloudtype.app/api/feedback")
                     .contentType(MediaType.APPLICATION_JSON)
                     .body(feedbackDto)
                     .retrieve()
