@@ -1,5 +1,7 @@
 package Xthon.gAIde.service;
 
+import Xthon.gAIde.domain.dto.request.AI.EvaluationRequest;
+import Xthon.gAIde.domain.dto.response.AI.EvaluationResponse;
 import Xthon.gAIde.domain.dto.response.DocumentResponse;
 import Xthon.gAIde.domain.dto.response.DocumentSaveResponse;
 import Xthon.gAIde.domain.dto.request.DocumentCreateRequest;
@@ -10,8 +12,11 @@ import Xthon.gAIde.exception.ErrorCode;
 import Xthon.gAIde.repository.DocumentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestClient;
 
 @Slf4j
 @Service
@@ -20,6 +25,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class DocumentService {
 
     private final DocumentRepository documentRepository;
+    private final RestClient restClient = RestClient.create();
+    private final ApplicationArguments applicationArguments;
 
     // [문서 생성]
     @Transactional // 쓰기 권한 필요
@@ -58,11 +65,39 @@ public class DocumentService {
         document.updateKeywords(req.keywords());
         document.updateContent(req.userText());
 
+        String eval = "ai 서버 연결 실패";
+
+        try {
+            // 요청 DTO 생성
+            EvaluationRequest aiRequest = new EvaluationRequest(
+                    req.category().name(),// Enum이라면 name() 변환 필요
+                    req.keywords(),
+                    req.userText()
+            );
+
+            // API 호출 (Synchronous)
+            EvaluationResponse aiResponse = restClient.post()
+                    .uri("https://port-0-gaide-mhvvbjymeac0f465.sel3.cloudtype.app/api/evaluation")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(aiRequest)
+                    .retrieve()
+                    .body(EvaluationResponse.class); // 응답을 객체로 변환
+
+            if (aiResponse != null && aiResponse.eval() != null) {
+                eval = aiResponse.eval();
+            }
+
+        } catch (Exception e) {
+            log.error("AI 서버 호출 중 오류 발생: {}", e.getMessage());
+            eval = "AI 분석을 완료할 수 없습니다: " + e.getMessage();
+        }
+
+
         log.info("문서 저장 완료: docId={}, length={}", docId, req.userText().length());
 
         // 3. 응답 반환 (이미지 명세에 맞춘 더미 평가 데이터)
         return new DocumentSaveResponse(
-                "나쁘지 않은 글 이네여", // eval: 나중에 AI 분석 결과로 대체될 부분
+                eval, // eval: 나중에 AI 분석 결과로 대체될 부분
                 "글 저장 성공"         // msg
         );
     }

@@ -1,14 +1,17 @@
 package Xthon.gAIde.controller;
 
+import Xthon.gAIde.domain.dto.response.DocumentFeedbackResponse;
 import Xthon.gAIde.domain.dto.response.DocumentResponse;
 import Xthon.gAIde.domain.dto.response.DocumentSaveResponse;
 import Xthon.gAIde.domain.dto.request.DocumentCreateRequest;
 import Xthon.gAIde.domain.dto.request.DocumentUpdateRequest;
 import Xthon.gAIde.service.DocumentService;
 import Xthon.gAIde.util.common.CommonResponseDto;
+import Xthon.gAIde.util.common.security.CustomUserDetails;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
@@ -26,18 +29,11 @@ public class DocumentController {
      * 설명: 초기 세팅(제목, 키워드 등)을 저장하고 doc_id를 반환
      */
     @PostMapping
-    public CommonResponseDto<Map<String, Long>> createDocument(
-            @RequestBody DocumentCreateRequest requestDto,
-            HttpServletRequest request
+    public CommonResponseDto<Long> createDocument(
+            @AuthenticationPrincipal CustomUserDetails user,
+            @RequestBody DocumentCreateRequest requestDto
     ) {
-        // 해커톤 편의상: 토큰 필터에서 memberId를 못 찾으면 1번 유저로 간주
-        Long memberId = (Long) request.getAttribute("memberId");
-        if (memberId == null) memberId = 1L;
-
-        Long docId = documentService.createDocument(memberId, requestDto);
-
-        // 응답: { "data": { "doc_id": 1 } }
-        return CommonResponseDto.ok(Map.of("doc_id", docId));
+        return CommonResponseDto.ok(documentService.createDocument(user.getUserId(), requestDto));
     }
 
     /**
@@ -65,6 +61,13 @@ public class DocumentController {
         DocumentSaveResponse response = documentService.updateDocument(docId, requestDto);
 
         // 응답: { "data": { "eval": "...", "msg": "..." } }
+        return CommonResponseDto.ok(response);
+    }
+
+    @PostMapping("{docId}/feedback")
+    public CommonResponseDto<DocumentFeedbackResponse> outlineDocument(){
+
+        DocumentFeedbackResponse response = null;
         return CommonResponseDto.ok(response);
     }
 }
