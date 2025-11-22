@@ -9,6 +9,8 @@ public record DocumentFeedbackRequestDto(
         @JsonProperty("category")
         Category category,
 
+        String title,
+
         @JsonProperty("keywords")
         List<String> keywords,
 

@@ -70,6 +70,7 @@ public class DocumentService {
 
         // 2. 내용 업데이트 (Entity 내부 메서드 사용 or Setter)
         document.updateCategory(req.category());
+        document.updateTitle(req.title());
         document.updateKeywords(req.keywords());
         document.updateContent(req.userText());
 
@@ -129,6 +130,7 @@ public class DocumentService {
         DocumentUpdateRequest updateRequestDto = new DocumentUpdateRequest(
                 docId,
                 feedbackDto.category(),
+                feedbackDto.title(),
                 feedbackDto.keywords(),
                 feedbackDto.description(),
                 feedbackDto.userText()
@@ -149,13 +151,8 @@ public class DocumentService {
                     .retrieve()
                     .body(FeedbackResponseDto.class);
 
-            System.out.println(feedbackResponseDto);
-
-            System.out.println(feedbackResponseDto.feedback());
-
             if (feedbackResponseDto != null && feedbackResponseDto.feedback() != null) {
                 feedback = feedbackResponseDto.feedback();
-                System.out.println("if문 test");
             }
         } catch (Exception e) {
             log.error("AI 서버 호출 중 오류 발생: {}", e.getMessage());
