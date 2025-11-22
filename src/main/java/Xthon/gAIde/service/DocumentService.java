@@ -74,6 +74,7 @@ public class DocumentService {
             EvaluationRequest aiRequest = new EvaluationRequest(
                     req.category().name(),// Enum이라면 name() 변환 필요
                     req.keywords(),
+                    req.description(),
                     req.userText()
             );
 
