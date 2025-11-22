@@ -14,6 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import java.util.Map;
+import Xthon.gAIde.domain.dto.response.DocumentListResponse;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -22,6 +24,15 @@ import java.util.Map;
 public class DocumentController {
 
     private final DocumentService documentService;
+
+    // [GET] 마이 페이지
+    // URL: /api/documents
+    @GetMapping
+    public CommonResponseDto<List<DocumentListResponse>> getMyDocuments(
+            @AuthenticationPrincipal CustomUserDetails user
+    ) {
+        return CommonResponseDto.ok(documentService.getMyDocuments(user.getUserId()));
+    }
 
     /**
      * [POST] 글 생성
@@ -35,7 +46,6 @@ public class DocumentController {
     ) {
         return CommonResponseDto.ok(documentService.createDocument(user.getUserId(), requestDto));
     }
-
     /**
      * [GET] 글 조회 (작성 화면 진입)
      * URL: /api/documents/{docId}

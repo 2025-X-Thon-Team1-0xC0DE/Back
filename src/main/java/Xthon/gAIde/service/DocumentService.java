@@ -17,6 +17,8 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestClient;
+import Xthon.gAIde.domain.dto.response.DocumentListResponse; // ⬅️ import 추가
+import java.util.List; // ⬅️ import 추가
 
 @Slf4j
 @Service
@@ -100,5 +102,15 @@ public class DocumentService {
                 eval, // eval: 나중에 AI 분석 결과로 대체될 부분
                 "글 저장 성공"         // msg
         );
+
+    }
+    public List<DocumentListResponse> getMyDocuments(Long memberId) {
+        // 1. DB에서 내 글 다 가져오기 (최신순)
+        List<Document> documents = documentRepository.findAllByMemberIdOrderByIdDesc(memberId);
+
+        // 2. DTO로 변환해서 반환
+        return documents.stream()
+                .map(DocumentListResponse::from)
+                .toList();
     }
 }
