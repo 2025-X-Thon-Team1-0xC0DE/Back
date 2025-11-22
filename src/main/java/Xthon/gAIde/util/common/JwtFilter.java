@@ -34,8 +34,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
         // 검사 예외 경로
         String path = request.getRequestURI();
-        if (path.equals("/api/signin") || path.equals("/api/signout") || path.equals("/api/signup") ||
-                path.equals("/mcp")) {
+        if (path.equals("/api/signin") || path.equals("/api/signup")) {
 
             filterChain.doFilter(request, response);
             return;
