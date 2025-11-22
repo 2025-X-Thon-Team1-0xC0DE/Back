@@ -1,6 +1,6 @@
 package Xthon.gAIde.controller;
 
-import Xthon.gAIde.domain.dto.response.DocumentFeedbackResponse;
+import Xthon.gAIde.domain.dto.request.DocumentFeedbackRequestDto;
 import Xthon.gAIde.domain.dto.response.DocumentResponse;
 import Xthon.gAIde.domain.dto.response.DocumentSaveResponse;
 import Xthon.gAIde.domain.dto.request.DocumentCreateRequest;
@@ -8,12 +8,10 @@ import Xthon.gAIde.domain.dto.request.DocumentUpdateRequest;
 import Xthon.gAIde.service.DocumentService;
 import Xthon.gAIde.util.common.CommonResponseDto;
 import Xthon.gAIde.util.common.security.CustomUserDetails;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import java.util.Map;
 
 @Slf4j
 @RestController
@@ -64,10 +62,15 @@ public class DocumentController {
         return CommonResponseDto.ok(response);
     }
 
-    @PostMapping("{docId}/feedback")
-    public CommonResponseDto<DocumentFeedbackResponse> outlineDocument(){
-
-        DocumentFeedbackResponse response = null;
-        return CommonResponseDto.ok(response);
+    // 사용자가 작성한 글을 피드백해 줌
+    // 피드백 전에 작성 내용은 DB에 저장됨
+    @PatchMapping("/{docId}/feedback")
+    public CommonResponseDto<?> feedbackDocument(
+            @PathVariable Long docId,
+            @RequestBody DocumentFeedbackRequestDto feedbackDto
+    ){
+        return CommonResponseDto.ok(documentService.feedbackDocument(docId, feedbackDto));
     }
+
+
 }
