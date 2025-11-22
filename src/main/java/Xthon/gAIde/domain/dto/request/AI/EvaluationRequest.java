@@ -5,12 +5,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 public record EvaluationRequest(
-        @JsonProperty("catetory")
         String category,
-
-        @JsonProperty("keywords")
         List<String> keywords,
-
+        String description,
         @JsonProperty("user_text")
         String userText
 ) {

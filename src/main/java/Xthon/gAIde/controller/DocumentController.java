@@ -1,6 +1,7 @@
 package Xthon.gAIde.controller;
 
 import Xthon.gAIde.domain.dto.request.DocumentFeedbackRequestDto;
+import Xthon.gAIde.domain.dto.response.DocumentFeedbackResponseDto;
 import Xthon.gAIde.domain.dto.response.DocumentResponse;
 import Xthon.gAIde.domain.dto.response.DocumentSaveResponse;
 import Xthon.gAIde.domain.dto.request.DocumentCreateRequest;
@@ -8,10 +9,14 @@ import Xthon.gAIde.domain.dto.request.DocumentUpdateRequest;
 import Xthon.gAIde.service.DocumentService;
 import Xthon.gAIde.util.common.CommonResponseDto;
 import Xthon.gAIde.util.common.security.CustomUserDetails;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import java.util.Map;
+import Xthon.gAIde.domain.dto.response.DocumentListResponse;
+import java.util.List;
 
 @Slf4j
 @RestController
