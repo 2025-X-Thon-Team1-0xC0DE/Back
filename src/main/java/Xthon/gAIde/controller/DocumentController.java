@@ -26,6 +26,14 @@ public class DocumentController {
 
     private final DocumentService documentService;
 
+
+    @GetMapping
+    public CommonResponseDto<List<DocumentListResponse>> getMyDocuments(
+            @AuthenticationPrincipal CustomUserDetails user
+    ) {
+        return CommonResponseDto.ok(documentService.getMyDocuments(user.getUserId()));
+    }
+
     /**
      * [POST] 글 생성
      * URL: /api/documents
