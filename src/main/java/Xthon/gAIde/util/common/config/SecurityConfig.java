@@ -41,7 +41,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(
 //                                "/mcp",
-                                    "/api/**",
+                                    "/api/**"
 //                                "/api/signin",  // 로그인 API
 
                         ).permitAll()
