@@ -12,7 +12,10 @@ public class WebConfig implements WebMvcConfigurer {
         registry
                 // "api/**"로 들어오는 모든 프론트 엔드의 요청 허용
                 .addMapping("/api/**")
-                .allowedOrigins("http://localhost:3000")
+                .allowedOrigins(
+                        "http://localhost:3000",
+                        "https://front-mauve-ten.vercel.app/"
+                )
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
                 .allowedHeaders("*")
 
