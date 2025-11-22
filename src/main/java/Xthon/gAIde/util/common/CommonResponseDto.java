@@ -14,7 +14,7 @@ import Xthon.gAIde.exception.CustomException;
 import Xthon.gAIde.exception.ErrorCode;
 
 public record CommonResponseDto<T>(@JsonIgnore HttpStatus httpStatus,
-                                   @NotNull Boolean sucsess,
+                                   @NotNull Boolean success,
                                    @Nullable T data,
                                    @Nullable ExceptionDto error) {
 
