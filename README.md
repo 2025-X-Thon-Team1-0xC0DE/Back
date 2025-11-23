@@ -73,7 +73,7 @@ src/
  │   ├─ java/
  │   │   └─ Xthon/
  │   │       └─ gAIde/
- │   │           ├─ controller/    # API 엔드포인트
+ │   │           ├─ controller/    # API endpoint
  │   │           ├─ domain/        
  │   │           │   ├─ dto/
  │   │           │   │   ├─ request/    # requestDto
@@ -81,8 +81,8 @@ src/
  │   │           │   └─ entity/    # entity class
  │   │           ├─ exception/    # CustomException
  │   │           ├─ repository/    # JPA Repository
- │   │           ├─ service/    # 비즈니스 로직
- │   │           └─ util/    # Security & JWT 설정
+ │   │           ├─ service/    # business logic
+ │   │           └─ util/    # Security & JWT config
  │   └─ resources/
  │       └─ application.yml
  └─ test/
